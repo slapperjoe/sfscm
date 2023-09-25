@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as cp from "child_process";
-import { ResultPreviewFile, RetrievePreviewJson } from './files';
+import * as _ from "lodash";
+import { ConfigObject, ResultPreviewFile, RetrievePreviewJson } from './files';
 
 export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem> {
 
@@ -17,49 +18,82 @@ export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem>
   retFileTypes: ConflictItem[] | undefined;
 
   loadPromise: Promise<boolean>;
+  loading: boolean;
 
   constructor(private workspaceRoot: string) {
-    this.loadPromise = this.reloadStatus();
+    this.loading = false;
+    this.loadPromise = Promise.resolve(false);
+    this.createTimedRefresh();
+  }
+
+  async createTimedRefresh() {
+    this.refresh();
+    this.loadPromise.then(a => {
+      ;
+      setTimeout(() => {
+        this.createTimedRefresh();
+      }, this.getConfig().retrievePreviewTimeout * 1000);
+    });
   }
 
   reloadStatus() {
-    return new Promise<boolean>((res, rej) => {
-      cp.exec('sf project retrieve preview --json', { cwd: this.workspaceRoot }, (err, stdout, stderr) => {
-        if (stdout) {
-          this.retrieveState = JSON.parse(stdout);
-          this.retrieve = this.retrieveState?.result.toRetrieve.map(a => new ConflictFile(a.fullName, a.type));
+    if (!this.loading) {
+      return new Promise<boolean>((res, rej) => {
+        this.loading = true;
+        let commandString = 'sf project retrieve preview --json';
 
-          if (this.retrieve) {
-            const fileGroup: {} | undefined = this.retrieveState?.result.toRetrieve.reduce(
-              (result, item) => ({
-                ...result,
-                [item["type"]]: [
-                  // @ts-ignore
-                  ...(result[item["type"]] || []),
-                  item,
-                ],
-              }),
-              {},
-            );
-            if (fileGroup) {
-              this.retFileTypes = Object.entries(fileGroup).map((a) => new ConflictGroup(a[0], (<ResultPreviewFile[]>a[1]).length, vscode.TreeItemCollapsibleState.Collapsed));
+        cp.exec(commandString,
+          {
+            cwd: this.workspaceRoot,
+            maxBuffer: 1024 * this.getConfig().readResponseBufferSizeKB
+          }, (err, stdout, stderr) => {
+            if (stdout) {
+              if (err) {
+                console.log('error: ', err);
+                vscode.window.showErrorMessage(`${err.code} ${err.message} ${err.stack}`);
+              }
+              this.retrieveState = JSON.parse(stdout);
+              this.retrieve = this.retrieveState?.result.toRetrieve.map(a => new ConflictFile(a.fullName, a.type));
+              const oldConflicts = this.conflicts;
+              this.conflicts = this.retrieveState?.result.conflicts.map(a => new ConflictFile(a.fullName, a.type, true));
+
+              this.retFileTypes = [];
+
+              if (this.retrieve) {
+                const fileGroup: {} | undefined = this.reduceResults(this.retrieveState?.result.toRetrieve);
+                if (fileGroup) {
+                  let fileSet = this.createConflictGroup(fileGroup);
+                  this.retFileTypes = fileSet;
+                }
+              }
+
+              if (this.conflicts){
+                if (!_.isEqual(this.conflicts, oldConflicts)){
+                  vscode.window.showWarningMessage(`Conflicted files spotted`);
+                }
+                const fileGroup: {} | undefined = this.reduceResults(this.retrieveState?.result.conflicts);
+                if (fileGroup) {
+                  let fileSet = this.createConflictGroup(fileGroup, true);
+                  this.retFileTypes = _.unionBy(fileSet, this.retFileTypes, 'name');
+                }
+              }
+              this.loading = false;
+              return res(true);
+
             }
-          }
-          return res(true);
+            if (stderr) {
+              console.log('stderr: ' + stderr);
+            }
+            this.loading = false;
+            return rej(false);
+          });
 
-        }
-        if (stderr) {
-          console.log('stderr: ' + stderr);
-        }
-        if (err) {
-          console.log('error: ', err);
-          vscode.window.showInformationMessage('Workspace has no package.json');
-          this.retrieve = undefined;
-        }
-        return rej(false);
       });
-      
-    });
+    } else {
+      this.loading = false;
+      console.log("Already refreshing.");
+      return Promise.reject('Already refreshing');
+    }
   }
 
   getTreeItem(element: ConflictItem): vscode.TreeItem {
@@ -72,13 +106,42 @@ export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem>
       return Promise.resolve([]);
     }
     if (element) {
-      return Promise.resolve(
-        this.retrieve?.filter(a => a.tooltip === element.name) ?? []
-      );
+      const conflicts = this.conflicts?.filter(a => a.tooltip === element.name) ?? [];
+      const retrievals = this.retrieve?.filter(a => a.tooltip === element.name) ?? [];
+      return Promise.resolve(_.union(conflicts, retrievals));
     } else {
       await this.loadPromise;
       return Promise.resolve(this.retFileTypes ?? []);
     }
+  }
+
+  reduceResults(resultSet: ResultPreviewFile[] | undefined) {
+    if (resultSet) {
+      return resultSet.reduce(
+        (result, item) => ({
+          ...result,
+          [item["type"]]: [
+            // @ts-ignore
+            ...(result[item["type"]] || []),
+            item,
+          ],
+        }),
+        {},
+      );
+    }
+    return undefined;
+  }
+
+  createConflictGroup(fileGroup: {} | undefined, hasConflict: boolean = false) {
+    if (fileGroup) {
+      let conflictGroup = Object.entries(fileGroup).map((a) => new ConflictGroup(a[0], (<ResultPreviewFile[]>a[1]).length, vscode.TreeItemCollapsibleState.Collapsed, hasConflict));
+      if (this.getConfig().monitorLightningOnly) {
+        conflictGroup = conflictGroup.filter(a => a.name === "LightningComponentBundle");
+      }
+      return conflictGroup;
+    }
+    return [];
+
   }
 
   refresh(): void {
@@ -86,6 +149,9 @@ export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem>
     this._onDidChangeTreeData.fire();
   }
 
+  getConfig(): ConfigObject {
+    return vscode.workspace.getConfiguration('sfscm') as ConfigObject;
+  }
 }
 
 class ConflictItem extends vscode.TreeItem {
@@ -104,32 +170,50 @@ class ConflictItem extends vscode.TreeItem {
   };
 }
 
-class ConflictGroup extends ConflictItem {
+export class ConflictGroup extends ConflictItem {
   constructor(
     public readonly name: string,
     private number: number,
-    public readonly collapsibleState: vscode.TreeItemCollapsibleState
+    public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    public hasConflicts: boolean = false
   ) {
     super(name, number.toString(), collapsibleState);
-    this.description = `(${this.number} files)`;
+    this.description = this.hasConflicts ? `(${this.number} conflicts)` : `(${this.number} items)`;
+    this.contextValue = "group";
+
+    if (hasConflicts){
+      this.iconPath = {
+        light: path.join(__filename, '..', '..', 'resources', 'icons', 'light', 'check.svg'),
+        dark: path.join(__filename, '..', '..', 'resources', 'icons', 'dark', 'check.svg')
+      };
+    }
   }
 
   iconPath = {
-    light: path.join(__filename, '..', '..', 'resources', 'light', 'dependency.svg'),
-    dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
+    light: '',
+    dark: ''
   };
 }
 
 class ConflictFile extends ConflictItem {
   constructor(
     public readonly fileName: string,
-    private filePath: string
+    private filePath: string,
+    public isConflicted : boolean = false
   ) {
     super(fileName, filePath, vscode.TreeItemCollapsibleState.None);
+    this.contextValue = "file";
+
+    if (isConflicted){
+      this.iconPath = {
+        light: path.join(__filename, '..', '..', 'resources', 'icons', 'light', 'check.svg'),
+        dark: path.join(__filename, '..', '..', 'resources', 'icons', 'dark', 'check.svg')
+      };
+    }
   }
 
   iconPath = {
-    light: path.join(__filename, '..', '..', 'resources', 'light', 'dependency.svg'),
-    dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
+    light: '',
+    dark: ''
   };
 }

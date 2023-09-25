@@ -1,3 +1,5 @@
+import { WorkspaceConfiguration } from "vscode"
+
 export interface RetrievePreviewJson {
   status: number,
   warnings: [],
@@ -11,7 +13,7 @@ export interface RetrieveJson {
 }
 
 export interface RetrievePreviewResult {
-  conflicts: [],
+  conflicts: ResultPreviewFile[],
   ignored: [],
   toDelete: [],
   toDeploy: [],
@@ -57,4 +59,10 @@ export interface FileProperty {
   lastModifiedDate: string,
   manageableState: string,
   type: string
+}
+
+export interface ConfigObject extends WorkspaceConfiguration {
+  monitorLightningOnly: boolean,
+  readResponseBufferSizeKB: number,
+  retrievePreviewTimeout: number
 }

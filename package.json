@@ -2,8 +2,12 @@
   "name": "sfscm",
   "publisher": "dev1",
   "displayName": "sfscm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slapperjoe/sfscm.git"
+  },
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.82.0"
   },
@@ -13,22 +17,46 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "SFSCM",
+      "properties": {
+        "sfscm.readResponseBufferSizeKB": {
+          "type": "number",
+          "default": 5120,
+          "description": "Maximum size of read buffer when retrieving JSON information from source (default 5120kB.)"
+        },
+        "sfscm.monitorLightningOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Only monitor LightningComponentBundles."
+        },
+        "sfscm.retrievePreviewTimeout": {
+          "type": "number",
+          "default": 300,
+          "description": "Time (in seconds) between each 'retrieve preview' backend call."
+        }
+      }
+    },
     "commands": [
       {
         "command": "sfscm.retrieve",
-        "title": "SF Project Retrieve"
-      },
-      {
-        "command": "sfscm.deploy",
-        "title": "SF Project Deploy"
+        "title": "SFSCM Project Retrieve"
       },
       {
         "command": "sfConflicts.refreshEntry",
         "title": "Refresh",
         "shortTitle": "Refresh",
-        "icon":{
+        "icon": {
           "dark": "resources/icons/dark/refresh.svg",
           "light": "resources/icons/light/refresh.svg"
+        }
+      },
+      {
+        "command": "sfConflicts.retrieveType",
+        "title": "Retrieve",
+        "icon": {
+          "light": "resources/icons/light/check.svg",
+          "dark": "resources/icons/dark/check.svg"
         }
       }
     ],
@@ -47,27 +75,44 @@
           "when": "view == sfConflicts",
           "group": "navigation"
         }
+      ],
+      "view/item/context": [
+        {
+          "command": "sfConflicts.retrieveType",
+          "when": "view == sfConflicts && viewItem == group"
+        }
       ]
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run package",
+    "webpack": "webpack --mode development",
+    "webpack-dev": "webpack --mode development --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "test-compile": "tsc -p ./"
   },
   "devDependencies": {
-    "@types/vscode": "^1.82.0",
+    "@types/lodash": "^4.14.199",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
+    "@types/vscode": "^1.82.0",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
+    "@vscode/test-electron": "^2.3.4",
+    "child_process": "^1.0.2",
     "eslint": "^8.47.0",
     "glob": "^10.3.3",
     "mocha": "^10.2.0",
+    "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
-    "@vscode/test-electron": "^2.3.4"
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
 }
