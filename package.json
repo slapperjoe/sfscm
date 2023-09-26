@@ -7,14 +7,16 @@
     "url": "https://github.com/slapperjoe/sfscm.git"
   },
   "description": "",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.82.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+		"workspaceContains:.sf"
+	],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
@@ -27,7 +29,7 @@
         },
         "sfscm.monitorLightningOnly": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Only monitor LightningComponentBundles."
         },
         "sfscm.retrievePreviewTimeout": {
@@ -58,6 +60,10 @@
           "light": "resources/icons/light/check.svg",
           "dark": "resources/icons/dark/check.svg"
         }
+      },
+      {
+        "command": "sfConflicts.compareFiles",
+        "title": "Merge"
       }
     ],
     "views": {
@@ -80,6 +86,9 @@
         {
           "command": "sfConflicts.retrieveType",
           "when": "view == sfConflicts && viewItem == group"
+        },{
+          "command": "sfConflicts.compareFiles",
+          "when": "view == sfConflicts && viewItem == conflictfile"
         }
       ]
     }
@@ -102,8 +111,7 @@
     "@types/vscode": "^1.82.0",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
-    "@vscode/test-electron": "^2.3.4",
-    "child_process": "^1.0.2",
+    "@vscode/test-electron": "^2.3.4",    
     "eslint": "^8.47.0",
     "glob": "^10.3.3",
     "mocha": "^10.2.0",
@@ -113,6 +121,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "child_process": "^1.0.2"
   }
 }

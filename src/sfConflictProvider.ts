@@ -53,9 +53,9 @@ export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem>
                 vscode.window.showErrorMessage(`${err.code} ${err.message} ${err.stack}`);
               }
               this.retrieveState = JSON.parse(stdout);
-              this.retrieve = this.retrieveState?.result.toRetrieve.map(a => new ConflictFile(a.fullName, a.type));
+              this.retrieve = this.retrieveState?.result.toRetrieve.map(a => new ConflictFile(a.fullName, a.type, a.path));
               const oldConflicts = this.conflicts;
-              this.conflicts = this.retrieveState?.result.conflicts.map(a => new ConflictFile(a.fullName, a.type, true));
+              this.conflicts = this.retrieveState?.result.conflicts.map(a => new ConflictFile(a.fullName, a.type, a.path, true));
 
               this.retFileTypes = [];
 
@@ -195,16 +195,19 @@ export class ConflictGroup extends ConflictItem {
   };
 }
 
-class ConflictFile extends ConflictItem {
+export class ConflictFile extends ConflictItem {
   constructor(
+    //public type: string,
     public readonly fileName: string,
-    private filePath: string,
+    public type: string,
+    public filePath: string,
     public isConflicted : boolean = false
   ) {
-    super(fileName, filePath, vscode.TreeItemCollapsibleState.None);
+    super(fileName, type, vscode.TreeItemCollapsibleState.None);
     this.contextValue = "file";
 
     if (isConflicted){
+      this.contextValue = "conflictfile";
       this.iconPath = {
         light: path.join(__filename, '..', '..', 'resources', 'icons', 'light', 'check.svg'),
         dark: path.join(__filename, '..', '..', 'resources', 'icons', 'dark', 'check.svg')
