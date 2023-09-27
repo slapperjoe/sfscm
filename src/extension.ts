@@ -1,8 +1,9 @@
-
 import * as vscode from 'vscode';
 import * as cp from "child_process";
 import { ConflictGroup, ConflictFile, SfConflictProvider } from './sfConflictProvider';
 import { ConfigObject, RetrieveJson } from './files';
+
+import { equal } from './compare.js';
 
 const rootPath: string =
 	vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
@@ -36,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function compareFiles(node: ConflictFile | undefined) {
-	if (node) {
+	if (node && node.type === "LightningComponentBundle") {
 		vscode.window.withProgress({
 			location: vscode.ProgressLocation.Notification,
 			title: `Retrieving ${node.name} from server to compare`,
@@ -52,19 +53,37 @@ function compareFiles(node: ConflictFile | undefined) {
 						maxBuffer: 1024 * getConfig().readResponseBufferSizeKB
 					}, async (err, stdout, stderr) => {
 
-						const testFile = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\poPublicationPreviewProviderInformation\\poPublicationPreviewProviderInformation.html`;
-						const localFile = 'c:\\src\\sf\\poasdev2\\force-app\\main\\default\\lwc\\poPublicationPreviewProviderInformation\\poPublicationPreviewProviderInformation.html';
-					
-						let repositoryUri = vscode.Uri.file(testFile);
-						let docUri = vscode.Uri.file(localFile);
+						const htmlTestFile = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\${node.name}.html`;
+						const htmlLocalFile = `${rootPath}\\force-app\\main\\default\\lwc\\${node.name}\\${node.name}.html`;
+						let htmlRepositoryUri = vscode.Uri.file(htmlTestFile);
+						let htmlDocUri = vscode.Uri.file(htmlLocalFile);
 
-						vscode.commands.executeCommand("vscode.diff", repositoryUri, docUri, `Remote Changes ↔ Local Changes`);
+						const m = await vscode.workspace.fs.readFile(htmlRepositoryUri);
+						const n = await vscode.workspace.fs.readFile(htmlDocUri);
+
+						if (!equal(m,n)){
+							vscode.commands.executeCommand("vscode.diff", htmlRepositoryUri, htmlDocUri, `HTML: Remote Changes ↔ Local Changes`);
+						}
+
+						// const jsTestFile = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\${node.name}.js`;
+						// const jsLocalFile = `c:\\src\\sf\\poasdev2\\force-app\\main\\default\\lwc\\${node.name}\\${node.name}.js`;					
+						// let jsRepositoryUri = vscode.Uri.file(jsTestFile);
+						// let jsDocUri = vscode.Uri.file(jsLocalFile);
+						// vscode.commands.executeCommand("vscode.diff", jsRepositoryUri, jsDocUri, `JS: Remote Changes ↔ Local Changes`);
+
+						// const cssTestFile = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\${node.name}.css`;
+						// const cssLocalFile = `c:\\src\\sf\\poasdev2\\force-app\\main\\default\\lwc\\${node.name}\\${node.name}.css`;					
+						// let cssRepositoryUri = vscode.Uri.file(cssTestFile);
+						// let cssDocUri = vscode.Uri.file(cssLocalFile);
+						// vscode.commands.executeCommand("vscode.diff", cssRepositoryUri, cssDocUri, `CSS: Remote Changes ↔ Local Changes`);
+
 						resolve();
 					});
-
 			});
 			return p;
 		});
+	} else {
+		vscode.window.showInformationMessage('Can currently only merge LWC components');
 	}
 	return Promise.resolve(false);
 }

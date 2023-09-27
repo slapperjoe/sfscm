@@ -15,8 +15,8 @@
     "Other"
   ],
   "activationEvents": [
-		"workspaceContains:.sf"
-	],
+    "workspaceContains:.sf"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
@@ -86,7 +86,8 @@
         {
           "command": "sfConflicts.retrieveType",
           "when": "view == sfConflicts && viewItem == group"
-        },{
+        },
+        {
           "command": "sfConflicts.compareFiles",
           "when": "view == sfConflicts && viewItem == conflictfile"
         }
@@ -111,7 +112,7 @@
     "@types/vscode": "^1.82.0",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
-    "@vscode/test-electron": "^2.3.4",    
+    "@vscode/test-electron": "^2.3.4",
     "eslint": "^8.47.0",
     "glob": "^10.3.3",
     "mocha": "^10.2.0",
@@ -121,7 +122,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
-    "child_process": "^1.0.2"
+    "@vscode/vsce": "^2.21.0",
+    "child_process": "^1.0.2",
+    "lodash": "^4.17.21"
   }
 }

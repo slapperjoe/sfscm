@@ -6,8 +6,10 @@ import { ConfigObject, ResultPreviewFile, RetrievePreviewJson } from './files';
 
 export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem> {
 
-  private _onDidChangeTreeData: vscode.EventEmitter<ConflictItem | undefined | null | void> = new vscode.EventEmitter<ConflictItem | undefined | null | void>();
-  readonly onDidChangeTreeData: vscode.Event<ConflictItem | undefined | null | void> = this._onDidChangeTreeData.event;
+  private _onDidChangeTreeData: vscode.EventEmitter<ConflictItem | undefined | null | void> = 
+                  new vscode.EventEmitter<ConflictItem | undefined | null | void>();
+  readonly onDidChangeTreeData: vscode.Event<ConflictItem | undefined | null | void> = 
+                  this._onDidChangeTreeData.event;
 
   retrieveState: RetrievePreviewJson | undefined;
 
@@ -67,7 +69,7 @@ export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem>
                 }
               }
 
-              if (this.conflicts){
+              if (this.conflicts && this.conflicts.length > 0){
                 if (!_.isEqual(this.conflicts, oldConflicts)){
                   vscode.window.showWarningMessage(`Conflicted files spotted`);
                 }
@@ -134,7 +136,8 @@ export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem>
 
   createConflictGroup(fileGroup: {} | undefined, hasConflict: boolean = false) {
     if (fileGroup) {
-      let conflictGroup = Object.entries(fileGroup).map((a) => new ConflictGroup(a[0], (<ResultPreviewFile[]>a[1]).length, vscode.TreeItemCollapsibleState.Collapsed, hasConflict));
+      let conflictGroup = Object.entries(fileGroup).map((a) => new ConflictGroup(a[0], 
+                  (<ResultPreviewFile[]>a[1]).length, vscode.TreeItemCollapsibleState.Collapsed, hasConflict));
       if (this.getConfig().monitorLightningOnly) {
         conflictGroup = conflictGroup.filter(a => a.name === "LightningComponentBundle");
       }
