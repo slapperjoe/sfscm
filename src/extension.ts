@@ -5,6 +5,16 @@ import { ConfigObject, RetrieveJson } from './files';
 
 import { equal } from './compare.js';
 
+interface IDictionary {
+	[index: string]: string;
+}
+const folderMap = {
+	LightningComponentBundle: "lwc",
+	// EmailTemplate:"email",
+	// ApexClass: "class",
+	// Flow: "flows"
+} as IDictionary;
+
 const rootPath: string =
 	vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
 		? vscode.workspace.workspaceFolders[0].uri.fsPath
@@ -19,7 +29,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	disposable = vscode.commands.registerCommand('sfscm.deploy', () => {
 		vscode.window.showInformationMessage('Getting latest Deploy Preview!!');
-		console.log("!!!");
 	});
 
 	context.subscriptions.push(disposable);
@@ -37,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function compareFiles(node: ConflictFile | undefined) {
-	if (node && node.type === "LightningComponentBundle") {
+	if (node && folderMap[node.type]) {// && node.type === "LightningComponentBundle") {
 		vscode.window.withProgress({
 			location: vscode.ProgressLocation.Notification,
 			title: `Retrieving ${node.name} from server to compare`,
@@ -53,8 +62,8 @@ function compareFiles(node: ConflictFile | undefined) {
 						maxBuffer: 1024 * getConfig().readResponseBufferSizeKB
 					}, async (err, stdout, stderr) => {
 
-						const testDir = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\`;
-						const localDir = `${rootPath}\\force-app\\main\\default\\lwc\\${node.name}\\`;
+						const testDir = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\${folderMap[node.type]}\\${node.name}\\`;
+						const localDir = `${rootPath}\\force-app\\main\\default\\${folderMap[node.type]}\\${node.name}\\`;
 						let testRepositoryUri = vscode.Uri.file(testDir);
 						let localDocUri = vscode.Uri.file(localDir);
 
@@ -85,7 +94,7 @@ function compareFiles(node: ConflictFile | undefined) {
 			return p;
 		});
 	} else {
-		vscode.window.showInformationMessage('Can currently only merge LWC components');
+		vscode.window.showInformationMessage('Cannot currently merge that type');
 	}
 	return Promise.resolve(false);
 }
