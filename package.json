@@ -63,7 +63,7 @@
       },
       {
         "command": "sfConflicts.compareFiles",
-        "title": "Merge"
+        "title": "Merge/Compare"
       }
     ],
     "views": {
@@ -90,6 +90,10 @@
         {
           "command": "sfConflicts.compareFiles",
           "when": "view == sfConflicts && viewItem == conflictfile"
+        },
+        {
+          "command": "sfConflicts.compareFiles",
+          "when": "view == sfConflicts && viewItem != group"
         }
       ]
     }

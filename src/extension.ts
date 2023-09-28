@@ -53,30 +53,32 @@ function compareFiles(node: ConflictFile | undefined) {
 						maxBuffer: 1024 * getConfig().readResponseBufferSizeKB
 					}, async (err, stdout, stderr) => {
 
-						const htmlTestFile = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\${node.name}.html`;
-						const htmlLocalFile = `${rootPath}\\force-app\\main\\default\\lwc\\${node.name}\\${node.name}.html`;
-						let htmlRepositoryUri = vscode.Uri.file(htmlTestFile);
-						let htmlDocUri = vscode.Uri.file(htmlLocalFile);
+						const testDir = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\`;
+						const localDir = `${rootPath}\\force-app\\main\\default\\lwc\\${node.name}\\`;
+						let testRepositoryUri = vscode.Uri.file(testDir);
+						let localDocUri = vscode.Uri.file(localDir);
 
-						const m = await vscode.workspace.fs.readFile(htmlRepositoryUri);
-						const n = await vscode.workspace.fs.readFile(htmlDocUri);
+						var xmlExtension = vscode.extensions.getExtension('l13rary.l13-diff');
 
-						if (!equal(m,n)){
-							vscode.commands.executeCommand("vscode.diff", htmlRepositoryUri, htmlDocUri, `HTML: Remote Changes ↔ Local Changes`);
+						// is the ext loaded and ready?
+						if (xmlExtension?.isActive == false) {
+							xmlExtension.activate().then(
+								async () => {
+									console.log("Extension activated");
+									// comment next line out for release
+									//findCommand();
+									await vscode.commands.executeCommand('l13Diff.action.panel.openAndCompare', testRepositoryUri, localDocUri);;
+									resolve();
+								},
+								(e) => {
+									console.log("Extension activation failed");
+									resolve();
+								}
+							);
+						} else {
+							await vscode.commands.executeCommand('l13Diff.action.panel.openAndCompare', testRepositoryUri, localDocUri);;
+							resolve();
 						}
-
-						// const jsTestFile = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\${node.name}.js`;
-						// const jsLocalFile = `c:\\src\\sf\\poasdev2\\force-app\\main\\default\\lwc\\${node.name}\\${node.name}.js`;					
-						// let jsRepositoryUri = vscode.Uri.file(jsTestFile);
-						// let jsDocUri = vscode.Uri.file(jsLocalFile);
-						// vscode.commands.executeCommand("vscode.diff", jsRepositoryUri, jsDocUri, `JS: Remote Changes ↔ Local Changes`);
-
-						// const cssTestFile = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\lwc\\${node.name}\\${node.name}.css`;
-						// const cssLocalFile = `c:\\src\\sf\\poasdev2\\force-app\\main\\default\\lwc\\${node.name}\\${node.name}.css`;					
-						// let cssRepositoryUri = vscode.Uri.file(cssTestFile);
-						// let cssDocUri = vscode.Uri.file(cssLocalFile);
-						// vscode.commands.executeCommand("vscode.diff", cssRepositoryUri, cssDocUri, `CSS: Remote Changes ↔ Local Changes`);
-
 						resolve();
 					});
 			});
@@ -87,6 +89,19 @@ function compareFiles(node: ConflictFile | undefined) {
 	}
 	return Promise.resolve(false);
 }
+
+var findCommand = function () {
+	vscode.commands.getCommands(true).then(
+		function (cmds) {
+			console.log("fulfilled");
+			console.log(cmds);
+		},
+		function () {
+			console.log("failed");
+			console.log(arguments);
+		}
+	);
+};
 
 function retrieveFiles(metadataType?: string | undefined) {
 	vscode.window.withProgress({
