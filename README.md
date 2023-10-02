@@ -27,6 +27,12 @@ Search SFSCM for extension settings.
 
 -
 
+### 0.0.4 
+
+Merging via Diff Folders
+* Lightning differences can now be 'merged' via Diff Folders extension
+* Defect fixes
+
 ### 0.0.2 
 
 Initial monitoring of conflicts
