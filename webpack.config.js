@@ -32,7 +32,9 @@ const config = {
       // Webpack 5 no longer polyfills Node.js core modules automatically.
       // see https://webpack.js.org/configuration/resolve/#resolvefallback
       // for the list of Node.js core module polyfills.
-
+      // "child_process": false,
+      // "path": require.resolve("path-browserify"),
+      // "fs": require.resolve("fs"),
     }
   },
   module: {

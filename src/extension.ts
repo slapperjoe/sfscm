@@ -1,9 +1,12 @@
 import * as vscode from 'vscode';
 import * as cp from "child_process";
 import { ConflictGroup, ConflictFile, SfConflictProvider } from './sfConflictProvider';
+
+import * as extensions from './vscode-diff/src/services/common/extensions';
 import { ConfigObject, RetrieveJson } from './files';
 
 import { equal } from './compare.js';
+import { DiffPanel } from './vscode-diff/src/services/panel/DiffPanel';
 
 interface IDictionary {
 	[index: string]: string;
@@ -35,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.registerCommand('sfConflicts.retrieveType', (node: ConflictGroup) => retrieveFiles(node.name));
 
-	vscode.commands.registerCommand('sfConflicts.compareFiles', (node: ConflictFile) => compareFiles(node));
+	vscode.commands.registerCommand('sfConflicts.compareFiles', (node: ConflictFile) => compareFiles(node, context));
 
 	const sfConflictProvider = new SfConflictProvider(rootPath);
 	vscode.window.registerTreeDataProvider('sfConflicts', sfConflictProvider);
@@ -45,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 }
 
-function compareFiles(node: ConflictFile | undefined) {
+function compareFiles(node: ConflictFile | undefined, context: vscode.ExtensionContext) {
 	if (node && folderMap[node.type]) {// && node.type === "LightningComponentBundle") {
 		vscode.window.withProgress({
 			location: vscode.ProgressLocation.Notification,
@@ -60,35 +63,18 @@ function compareFiles(node: ConflictFile | undefined) {
 					{
 						cwd: rootPath,
 						maxBuffer: 1024 * getConfig().readResponseBufferSizeKB
-					}, async (err, stdout, stderr) => {
+					}, (err, stdout, stderr) => {
 
 						const testDir = `${rootPath}\\.sfscm\\unpackaged\\unpackaged\\${folderMap[node.type]}\\${node.name}\\`;
 						const localDir = `${rootPath}\\force-app\\main\\default\\${folderMap[node.type]}\\${node.name}\\`;
 						let testRepositoryUri = vscode.Uri.file(testDir);
 						let localDocUri = vscode.Uri.file(localDir);
 
-						var xmlExtension = vscode.extensions.getExtension('l13rary.l13-diff');
+						extensions.buildWhitelistForTextFiles();
+						DiffPanel.create(context, [testRepositoryUri, localDocUri], true, true);
 
-						// is the ext loaded and ready?
-						if (xmlExtension?.isActive == false) {
-							xmlExtension.activate().then(
-								async () => {
-									console.log("Extension activated");
-									// comment next line out for release
-									//findCommand();
-									await vscode.commands.executeCommand('l13Diff.action.panel.openAndCompare', testRepositoryUri, localDocUri);;
-									resolve();
-								},
-								(e) => {
-									console.log("Extension activation failed");
-									resolve();
-								}
-							);
-						} else {
-							await vscode.commands.executeCommand('l13Diff.action.panel.openAndCompare', testRepositoryUri, localDocUri);;
-							resolve();
-						}
 						resolve();
+						
 					});
 			});
 			return p;

@@ -27,6 +27,11 @@ Search SFSCM for extension settings.
 
 -
 
+### 0.0.5 
+
+Merging via Diff Folders
+* Fix Diff services not loading correctly to detect text files
+
 ### 0.0.4 
 
 Merging via Diff Folders

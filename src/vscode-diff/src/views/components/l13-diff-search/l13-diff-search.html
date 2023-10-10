@@ -1,0 +1,13 @@
+<div id="l13_resizer"></div>
+<div class="l13-input">
+	<input id="l13_searchterm" type="text" [(model)]="searchterm" [disabled]="disabled">
+	<input id="l13_case_sensitive" type="checkbox" [(model)]="useCaseSensitive" [disabled]="disabled">
+	<input id="l13_use_regexp" type="checkbox" [(model)]="useRegExp" [disabled]="disabled">
+	<div class="l13-message" [if]="error">{{ error }}</div>
+</div>
+<input id="l13_use_files" class="-option" type="checkbox" [(model)]="useFiles" [disabled]="disabled">
+<input id="l13_use_folders" class="-option" type="checkbox" [(model)]="useFolders" [disabled]="disabled">
+<input id="l13_use_symlinks" class="-option" type="checkbox" [(model)]="useSymlinks" [disabled]="disabled">
+<input id="l13_use_conflicts" class="-option" type="checkbox" [(model)]="useConflicts" [disabled]="disabled">
+<input id="l13_use_others" class="-option" type="checkbox" [(model)]="useOthers" [disabled]="disabled">
+<button id="l13_close" [disabled]="disabled"></button>

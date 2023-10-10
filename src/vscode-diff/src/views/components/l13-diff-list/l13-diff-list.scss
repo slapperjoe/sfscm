@@ -1,0 +1,328 @@
+:host {
+	display: block;
+	overflow: auto;
+	transform: translate3d(0, 0, 0);
+	user-select: none;
+}
+
+l13-diff-list-content {
+	display: block;
+	transform: translate3d(0, 0, 0);
+	width: 100%;
+	
+	&.-focus {
+		
+		l13-diff-list-row {
+			
+			&.-selected {
+				background: var(--vscode-list-activeSelectionBackground);
+				color: var(--vscode-list-activeSelectionForeground);
+		
+				&.-ignored {
+					
+					l13-diff-list-file {
+						
+						span {
+							
+							&.-missing {
+								color: var(--vscode-list-activeSelectionForeground);
+							}
+						}
+					}
+				}
+					
+				l13-diff-list-file {
+					
+					&::before {
+						background: var(--vscode-list-activeSelectionForeground, var(--l13-icon-background));
+					}
+					
+					span {
+						
+						&.-exists {
+							color: var(--vscode-list-activeSelectionForeground);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	&.-drag-n-drop {
+		
+		&#{-file} {
+			
+			l13-diff-list-file {
+				
+				&.-folder,
+				&.-symlink {
+					opacity: .3;
+				}
+			}
+		}
+		
+		&#{-folder} {
+			
+			l13-diff-list-file {
+				
+				&.-file,
+				&.-symlink {
+					opacity: .3;
+				}
+			}
+		}
+		
+		&#{-symlink} {
+			
+			l13-diff-list-file {
+				
+				&.-file,
+				&.-folder {
+					opacity: .3;
+				}
+			}
+		}
+	}
+}
+
+l13-diff-list-row {
+	display: flex;
+	height: 22px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	outline-offset: -1px;
+	width: 100%;
+	
+	&:hover {
+		background: var(--vscode-list-hoverBackground);
+		color: var(--vscode-list-hoverForeground);
+		outline: var(--l13-list-hover-outline, none);
+	}
+	
+	&.-selected {
+		background: var(--vscode-list-inactiveSelectionBackground);
+		color: var(--vscode-list-inactiveSelectionForeground);
+		outline: var(--l13-list-active-outline, none);
+			
+		l13-diff-list-file {
+			
+			& ::before {
+				// Fixes icon which disappears if list loses focus ?!?
+				background: var(--l13-icon-background);
+			}
+					
+			// span {
+				
+				// &.-exists {
+					// color: var(--vscode-list-inactiveSelectionForeground, var(--vscode-foreground));
+				// }
+			// }
+		}
+	}
+	
+	&.-deleted {
+		color: var(--vscode-gitDecoration-deletedResourceForeground);
+	}
+	
+	&.-modified {
+		color: var(--vscode-gitDecoration-modifiedResourceForeground);
+	}
+	
+	&.-unchanged {
+		color: var(--vscode-foreground);
+		
+		l13-diff-list-file.-folder span.-exists {
+			padding-right: 0;
+		}
+	}
+	
+	&.-ignored {
+		
+		l13-diff-list-file {
+			
+			&::before {
+				opacity: .3;
+			}
+			
+			&.-deleted {
+				
+				span.-missing {
+					color: var(--vscode-gitDecoration-deletedResourceForeground);
+				}
+			}
+			
+			&.-untracked {
+				
+				span.-missing {
+					color: var(--vscode-gitDecoration-untrackedResourceForeground);
+				}
+			}
+			
+			span {
+				
+				&.-basename {
+					color: var(--vscode-gitDecoration-ignoredResourceForeground);
+					opacity: .5;
+				}
+			}
+			
+			&.-folder {
+				
+				span {
+					
+					&.-missing {
+						padding-right: 5px;
+					}
+				}
+			}
+		}
+	}
+	
+	&.-conflicting {
+		color: var(--vscode-gitDecoration-conflictingResourceForeground);
+	}
+	
+	&.-untracked {
+		color: var(--vscode-gitDecoration-untrackedResourceForeground);
+	}
+	
+	&.-error {
+		background: var(--vscode-list-errorForeground);
+		color: #ffffff;
+		
+		l13-diff-list-file::before {
+			background: #ffffff;
+		}
+	}
+}
+	
+l13-diff-list-file {
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	overflow: hidden;
+	padding: 2px 3px 4px 36px;
+	position: relative;
+	width: calc(50% - 22px);
+	
+	&:first-child {
+		padding-left: 31px;
+		padding-right: 10px;
+		width: calc(50% + 22px);
+		
+		&.-error::before,
+		&.-file::before,
+		&.-folder::before,
+		&.-symlink::before,
+		&.-unknown::before {
+			left: 10px;
+		}
+	}
+	
+	&.-draghover {
+		background: var(--vscode-list-focusBackground);
+		color: var(--vscode-list-focusForeground);
+	}
+	
+	&.-error,
+	&.-file,
+	&.-folder,
+	&.-symlink,
+	&.-unknown {
+		cursor: pointer;
+		
+		&::before {
+			background: var(--l13-icon-background);
+			content: '';
+			display: block;
+			height: 16px;
+			left: 15px;
+			-webkit-mask-position: 50% 50%;
+			mask-position: 50% 50%;
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			position: absolute;
+			top: 2px;
+			width: 16px;
+		}
+	}
+	
+	&.-error {
+		
+		&::before {
+			-webkit-mask-image: url('list-error.svg');
+			mask-image: url('list-error.svg');
+		}
+	}
+	
+	&.-file {
+		
+		&::before {
+			-webkit-mask-image: url('list-file.svg');
+			mask-image: url('list-file.svg');
+		}
+	}
+	
+	&.-folder {
+		
+		&::before {
+			-webkit-mask-image: url('list-folder.svg');
+			mask-image: url('list-folder.svg');
+		}
+		
+		span {
+			
+			&.-basename {
+				opacity: 0.7;
+			}
+			
+			&.-missing {
+				padding-right: 0;
+			}
+		}
+	}
+	
+	&.-symlink {
+		
+		&::before {
+			-webkit-mask-image: url('list-symlink.svg');
+			mask-image: url('list-symlink.svg');
+		}
+	}
+	
+	&.-unknown {
+		
+		&::before {
+			-webkit-mask-image: url('list-unknown.svg');
+			mask-image: url('list-unknown.svg');
+		}
+	}
+	
+	div.-path {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: pre;
+	}
+	
+	span {
+		
+		&.-exists {
+			color: var(--vscode-foreground);
+			opacity: 0.7;
+			padding-right: 5px;
+		}
+		
+		&.-missing {
+			opacity: 0.7;
+			padding-right: 5px;
+		}
+		
+		&.-info {
+			color: var(--vscode-foreground);
+			font-size: 11px;
+			opacity: 0.5;
+			padding-left: 5px;
+		}
+	}
+}

@@ -1,0 +1,181 @@
+:host {
+	display: flex;
+	font-size: 0.8125rem;
+	flex-direction: column;
+	height: 100%;
+	max-height: 100%;
+	min-width: 610px;
+	position: relative;
+}
+
+l13-diff-panel {
+	background: var(--vscode-sideBar-background);
+	position: relative;
+	z-index: 2;
+}
+
+l13-diff-folders {
+	background: var(--vscode-sideBar-background);
+	display: flex;
+	position: relative;
+	z-index: 4;
+}
+	
+l13-diff-input {
+	box-sizing: border-box;
+	margin: 10px 10px 0 15px;
+	position: relative;
+	width: 50%;
+	z-index: 3;
+	
+	&:first-child {
+		margin: 10px 15px 0 10px;
+	}
+}
+	
+l13-diff-menu {
+	max-height: 50vh;
+	overflow: auto;
+	position: absolute;
+	width: 100%;
+	z-index: 5;
+}
+
+l13-diff-swap {
+	left: calc(50% - 11px);
+	position: absolute;
+	top: 9px;
+	z-index: 3;
+}
+
+l13-diff-tools {
+	background: var(--vscode-sideBar-background);
+	display: flex;
+	padding: 7px 0 4px 0;
+	position: relative;
+	z-index: 3;
+}
+
+l13-diff-views,
+l13-diff-compare {
+	min-width: 175px;
+	width: 25%;
+}
+
+l13-diff-actions {
+	min-width: 240px;
+	width: 50%;
+}
+
+l13-diff-widgets {
+	display: block;
+	position: relative;
+	z-index: 2;
+}
+
+l13-diff-search {
+	position: absolute;
+	right: 28px;
+	top: 0;
+	
+	&.-movein {
+		animation: movein 0.1s linear;
+	}
+	
+	&.-moveout {
+		animation: moveout 0.1s linear;
+	}
+}
+
+@keyframes movein {
+	0% {
+		top: -42px;
+	}
+	100% {
+		top: 0;
+	}
+}
+
+@keyframes moveout {
+	0% {
+		top: 0;
+	}
+	100% {
+		top: -42px;
+	}
+}
+
+l13-diff-list {
+	position: relative;
+	margin: 0 30px 0 0;
+	z-index: 1;
+	
+	&:focus {
+		outline: solid 1px var(--vscode-focusBorder, transparent);
+		outline-offset: -1px;
+	}
+	
+	&.-widgets {
+		margin-top: 34px;
+	}
+	
+	&.-active {
+		pointer-events: none;
+		
+		&::-webkit-scrollbar-thumb {
+			background-color: var(--vscode-scrollbarSlider-activeBackground);
+		}
+	}
+}
+
+l13-diff-navigator {
+	position: absolute;
+	right: 0;
+	top: 75px;
+	width: 44px;
+	z-index: 0;
+	
+	&.-widgets {
+		margin-top: 34px;
+	}
+}
+
+l13-diff-intro {
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, calc(-50% + 20px));
+	user-select: none;
+}
+
+l13-diff-no-result {
+	display: block;
+	left: 50%;
+	opacity: 0.7;
+	position: absolute;
+	top: 50%;
+	text-align: center;
+	transform: translate(-50%, calc(-50% + 20px));
+	user-select: none;
+}
+
+::-webkit-scrollbar {
+	height: 14px;
+	width: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: var(--vscode-scrollbarSlider-background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: var(--vscode-scrollbarSlider-hoverBackground);
+}
+
+::-webkit-scrollbar-thumb:active {
+	background-color: var(--vscode-scrollbarSlider-activeBackground);
+}
+
+::-webkit-scrollbar-corner {
+	background-color: rgba(0, 0, 0, 0);
+}
