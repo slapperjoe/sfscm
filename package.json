@@ -1,13 +1,20 @@
 {
   "name": "sfscm",
   "publisher": "dev1",
-  "displayName": "sfscm",
+  "displayName": "SFMerge",
+  "description": "Merging for Lightning Web Components in a sandbox environment",
   "repository": {
     "type": "git",
     "url": "https://github.com/slapperjoe/sfscm.git"
   },
-  "description": "",
-  "version": "0.0.6",
+  "preview": true,  
+  "icon": "media/icons/dev1.png",
+  "galleryBanner": {
+    "color": "#F2EEE4",
+    "theme": "light"
+  },
+  "pricing": "Free",
+  "version": "0.0.7",
   "engines": {
     "vscode": "^1.82.0"
   },
