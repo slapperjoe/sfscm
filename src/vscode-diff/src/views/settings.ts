@@ -1,6 +1,6 @@
 //	Imports ____________________________________________________________________
 
-import { window } from 'vscode';
+//import { window } from 'vscode';
 import type { DiffPanelSettings } from '../types';
 
 import { msg } from './common';

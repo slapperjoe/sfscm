@@ -57,9 +57,10 @@ l13-diff-tools {
 }
 
 l13-diff-views,
-l13-diff-compare {
+l13-diff-compare,
+l13-diff-complete {
 	min-width: 175px;
-	width: 25%;
+	
 }
 
 l13-diff-actions {
@@ -145,7 +146,8 @@ l13-diff-intro {
 	position: absolute;
 	top: 50%;
 	transform: translate(-50%, calc(-50% + 20px));
-	user-select: none;
+	-webkit-user-select: none;
+	user-select: none;	
 }
 
 l13-diff-no-result {
@@ -156,6 +158,7 @@ l13-diff-no-result {
 	top: 50%;
 	text-align: center;
 	transform: translate(-50%, calc(-50% + 20px));
+	-webkit-user-select: none;
 	user-select: none;
 }
 

@@ -2,6 +2,7 @@
 
 import * as actions from './commands/actions';
 import * as compare from './commands/compare';
+import * as complete from './commands/complete';
 import * as favorites from './commands/favorites';
 import * as input from './commands/input';
 import * as list from './commands/list';
@@ -23,6 +24,7 @@ import * as views from './commands/views';
 export {
 	actions,
 	compare,
+	complete,
 	favorites,
 	input,
 	list,
@@ -33,4 +35,3 @@ export {
 };
 
 //	Functions __________________________________________________________________
-

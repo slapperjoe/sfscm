@@ -2,6 +2,7 @@
 
 import * as actions from './events/actions';
 import * as compare from './events/compare';
+import * as complete from './events/complete';
 import * as diff from './events/diff';
 import * as input from './events/input';
 import * as list from './events/list';
@@ -23,6 +24,7 @@ import * as window from './events/window';
 export {
 	actions,
 	compare,
+	complete,
 	diff,
 	input,
 	list,
@@ -33,4 +35,3 @@ export {
 };
 
 //	Functions __________________________________________________________________
-

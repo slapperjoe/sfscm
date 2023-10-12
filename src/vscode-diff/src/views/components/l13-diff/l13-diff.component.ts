@@ -6,6 +6,7 @@ import { L13Component, L13Element, L13Query } from '../../@l13/core';
 
 import type { L13DiffActionsComponent } from '../l13-diff-actions/l13-diff-actions.component';
 import type { L13DiffCompareComponent } from '../l13-diff-compare/l13-diff-compare.component';
+import type { L13DiffCompleteComponent } from '../l13-diff-complete/l13-diff-complete.component';
 import type { L13DiffInputComponent } from '../l13-diff-input/l13-diff-input.component';
 import type { L13DiffIntroComponent } from '../l13-diff-intro/l13-diff-intro.component';
 import type { L13DiffListComponent } from '../l13-diff-list/l13-diff-list.component';
@@ -17,6 +18,7 @@ import type { L13DiffSwapComponent } from '../l13-diff-swap/l13-diff-swap.compon
 
 import { L13DiffActionsViewModelService } from '../l13-diff-actions/l13-diff-actions.service';
 import { L13DiffCompareViewModelService } from '../l13-diff-compare/l13-diff-compare.service';
+import { L13DiffCompleteViewModelService } from '../l13-diff-complete/l13-diff-complete.service';
 import { L13DiffInputViewModelService } from '../l13-diff-input/l13-diff-input.service';
 import { L13DiffListViewModelService } from '../l13-diff-list/l13-diff-list.service';
 import { L13DiffPanelViewModelService } from '../l13-diff-panel/l13-diff-panel.service';
@@ -42,6 +44,7 @@ import type { L13DiffViewModel } from './l13-diff.viewmodel';
 
 const actionsVM = new L13DiffActionsViewModelService().model('actions');
 const compareVM = new L13DiffCompareViewModelService().model('compare');
+const completeVM = new L13DiffCompleteViewModelService().model('complete');
 const leftVM = new L13DiffInputViewModelService().model('left');
 const listVM = new L13DiffListViewModelService().model('list');
 const panelVM = new L13DiffPanelViewModelService().model('panel');
@@ -82,6 +85,9 @@ export class L13DiffComponent extends L13Element<L13DiffViewModel> {
 	
 	@L13Query('l13-diff-compare')
 	private compare: L13DiffCompareComponent;
+
+	@L13Query('l13-diff-complete')
+	private complete: L13DiffCompleteComponent;
 	
 	@L13Query('l13-diff-navigator')
 	private navigator: L13DiffNavigatorComponent;
@@ -125,6 +131,7 @@ export class L13DiffComponent extends L13Element<L13DiffViewModel> {
 		
 		const actions = this.actions;
 		const compare = this.compare;
+		const complete = this.complete;
 		const intro = this.intro;
 		const left = this.left;
 		const list = this.list;
@@ -138,6 +145,7 @@ export class L13DiffComponent extends L13Element<L13DiffViewModel> {
 		
 		commands.actions.init({ list });
 		commands.compare.init({ diff, left, right, search });
+		commands.complete.init({ diff, left, right, search });
 		commands.favorites.init({ leftVM, rightVM });
 		commands.input.init({ leftVM, rightVM });
 		commands.list.init({ diff, list, search });
@@ -148,6 +156,7 @@ export class L13DiffComponent extends L13Element<L13DiffViewModel> {
 		
 		events.actions.init({ diff, actions, list });
 		events.compare.init({ diff, compare });
+		events.complete.init({ diff, complete });
 		events.input.init({ diff, left, menu, right });
 		events.list.init({ diff, actionsVM, intro, list, listVM, navigator, result });
 		events.navigator.init({ list, navigator });
@@ -169,6 +178,7 @@ export class L13DiffComponent extends L13Element<L13DiffViewModel> {
 		}
 		
 		compareVM.enable();
+		completeVM.enable();
 		leftVM.enable();
 		listVM.enable();
 		rightVM.enable();
@@ -185,6 +195,7 @@ export class L13DiffComponent extends L13Element<L13DiffViewModel> {
 		
 		actionsVM.disable();
 		compareVM.disable();
+		completeVM.disable();
 		leftVM.disable();
 		listVM.disable();
 		rightVM.disable();

@@ -3,6 +3,7 @@
 import type { L13DiffActionsComponent } from '../components/l13-diff-actions/l13-diff-actions.component';
 import type { L13DiffActionsViewModel } from '../components/l13-diff-actions/l13-diff-actions.viewmodel';
 import type { L13DiffCompareComponent } from '../components/l13-diff-compare/l13-diff-compare.component';
+import type { L13DiffCompleteComponent } from '../components/l13-diff-complete/l13-diff-complete.component';
 import type { L13DiffContextComponent } from '../components/l13-diff-context/l13-diff-context.component';
 import type { L13DiffInputComponent } from '../components/l13-diff-input/l13-diff-input.component';
 import type { L13DiffInputViewModel } from '../components/l13-diff-input/l13-diff-input.viewmodel';
@@ -43,9 +44,21 @@ export type CompareCommandsInit = {
 	search: L13DiffSearchComponent,
 };
 
+export type CompleteCommandsInit = {
+	diff: L13DiffComponent,
+	left: L13DiffInputComponent,
+	right: L13DiffInputComponent,
+	search: L13DiffSearchComponent,
+};
+
 export type CompareEventsInit = {
 	diff: L13DiffComponent,
 	compare: L13DiffCompareComponent,
+};
+
+export type CompleteEventsInit = {
+	diff: L13DiffComponent,
+	complete: L13DiffCompleteComponent,
 };
 
 export type ContextEventsInit = {
@@ -140,4 +153,3 @@ export type WindowEventsInit = {
 };
 
 //	Functions __________________________________________________________________
-

@@ -18,7 +18,7 @@ import { msg } from '../../../common';
 
 export function init ({ list }: DragNDropEventsInit) {
 	
-	let dragSrcElement: HTMLElement  =  null;
+	let dragSrcElement: HTMLElement = null;
 	let dropHoverElement: HTMLElement = null;
 	
 	list.content.addEventListener('dragstart', (event) => {

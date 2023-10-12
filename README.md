@@ -26,6 +26,10 @@ Search SFSCM for extension settings.
 ## Release Notes
 
 -
+### 0.0.6 
+
+Initial push to store for test
+* External machine test
 
 ### 0.0.5 
 

@@ -33,8 +33,8 @@ export class DiffOpen {
 			else if (stat.isDirectory()) void 0;
 			else if (stat.isSymbolicLink()) await openFile(SymlinkContentProvider.parse(fsPath), openToSide, preview);
 			else vscode.window.showErrorMessage(`File can't be opened. "${fsPath}" is not a file.`);
-		} catch (error) {
-			vscode.window.showErrorMessage((error as any).message);
+		} catch (error: any) {
+			vscode.window.showErrorMessage(error.message);
 		}
 		
 	}

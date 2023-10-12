@@ -603,16 +603,16 @@
         }
     }
     function addButtonActiveStyleEvents(element) {
-        element.addEventListener('mousedown', () => element.classList.add('-active'));
-        element.addEventListener('mouseup', () => element.classList.remove('-active'));
-        element.addEventListener('mouseleave', () => element.classList.remove('-active'));
+        element === null || element === void 0 ? void 0 : element.addEventListener('mousedown', () => element.classList.add('-active'));
+        element === null || element === void 0 ? void 0 : element.addEventListener('mouseup', () => element.classList.remove('-active'));
+        element === null || element === void 0 ? void 0 : element.addEventListener('mouseleave', () => element.classList.remove('-active'));
     }
     function setLabel(element, title) {
-        element.setAttribute('aria-label', title);
-        element.setAttribute('title', title);
+        element === null || element === void 0 ? void 0 : element.setAttribute('aria-label', title);
+        element === null || element === void 0 ? void 0 : element.setAttribute('title', title);
     }
     function disableContextMenu(element) {
-        element.addEventListener('contextmenu', (event) => {
+        element === null || element === void 0 ? void 0 : element.addEventListener('contextmenu', (event) => {
             event.preventDefault();
             return false;
         });
@@ -712,6 +712,29 @@
             super(...arguments);
             this.name = 'l13-diff-compare';
             this.vmc = L13DiffCompareViewModel;
+        }
+    }
+
+    class L13DiffCompleteViewModel extends ViewModel {
+        constructor() {
+            super(...arguments);
+            this.disabled = false;
+        }
+        disable() {
+            this.disabled = true;
+            this.requestUpdate();
+        }
+        enable() {
+            this.disabled = false;
+            this.requestUpdate();
+        }
+    }
+
+    class L13DiffCompleteViewModelService extends ViewModelService {
+        constructor() {
+            super(...arguments);
+            this.name = 'l13-diff-complete';
+            this.vmc = L13DiffCompleteViewModel;
         }
     }
 
@@ -1368,6 +1391,7 @@
     var styles = {
         "l13-diff-actions/l13-diff-actions.css": ":host{cursor:default;display:block;text-align:center;user-select:none}:host>button{background:rgba(0,0,0,0);border:0;border-radius:5px;height:26px;margin:0 2px 0 2px;padding:0 0 0 0;position:relative;width:26px}:host>button::before{background:var(--l13-icon-background);content:\"\";height:100%;left:0;-webkit-mask-position:50% 50%;mask-position:50% 50%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;position:absolute;top:0;width:100%}:host>button:focus{outline:solid 1px var(--vscode-focusBorder, transparent)}:host>button:not([disabled]):hover{cursor:pointer;outline:var(--l13-list-hover-outline, none);background-color:var(--l13-button-hover-background)}:host>button:not([disabled]).-active{background-color:var(--l13-button-active-background)}:host>button[disabled]{cursor:default;opacity:.3}:host>button#l13_copy_left{width:46px}:host>button#l13_copy_left::before{-webkit-mask-image:url(\"copy-left.svg\");mask-image:url(\"copy-left.svg\")}:host>button#l13_select_deleted::before{-webkit-mask-image:url(\"select-deleted.svg\");mask-image:url(\"select-deleted.svg\")}:host>button#l13_select_modified::before{-webkit-mask-image:url(\"select-modified.svg\");mask-image:url(\"select-modified.svg\")}:host>button#l13_select_untracked::before{-webkit-mask-image:url(\"select-untracked.svg\");mask-image:url(\"select-untracked.svg\")}:host>button#l13_select_all::before{-webkit-mask-image:url(\"select-all.svg\");mask-image:url(\"select-all.svg\")}:host>button#l13_copy_right{width:46px}:host>button#l13_copy_right::before{-webkit-mask-image:url(\"copy-right.svg\");mask-image:url(\"copy-right.svg\")}",
         "l13-diff-compare/l13-diff-compare.css": ":host{display:block;padding:3px 10px 0 0;text-align:right;user-select:none}button{background:var(--vscode-button-background);border:none;box-sizing:border-box;color:var(--vscode-button-foreground);cursor:pointer;font-size:.8125rem;outline:var(--l13-button-outline, none);padding:2px 14px 3px 14px;position:relative;z-index:1}button:hover{background:var(--vscode-button-hoverBackground)}button:focus{outline:solid 1px var(--vscode-focusBorder, transparent);outline-offset:1px}button[disabled]{opacity:.3;cursor:default}button[disabled]:hover{background:var(--vscode-button-background) !important}",
+        "l13-diff-complete/l13-diff-complete.css": ":host{display:block;padding:3px 10px 0 0;text-align:right;user-select:none}button{background:var(--vscode-button-background);border:none;box-sizing:border-box;color:var(--vscode-button-foreground);cursor:pointer;font-size:.8125rem;outline:var(--l13-button-outline, none);padding:2px 14px 3px 14px;position:relative;z-index:1}button:hover{background:var(--vscode-button-hoverBackground)}button:focus{outline:solid 1px var(--vscode-focusBorder, transparent);outline-offset:1px}button[disabled]{opacity:.3;cursor:default}button[disabled]:hover{background:var(--vscode-button-background) !important}",
         "l13-diff-context/l13-diff-context.css": ":host{box-sizing:border-box;line-height:1px;padding:1px 0 0 0;vertical-align:sub;white-space:nowrap}:host button{background:rgba(0,0,0,0);border:none;border-radius:5px;cursor:pointer;display:inline-block;height:22px;margin:-3px 0 0 0;position:relative;width:22px;z-index:1}:host button:not([disabled]):hover{background-color:var(--l13-button-hover-background)}:host button:not([disabled]).-active{background-color:var(--l13-button-active-background)}:host button:not([disabled]).-active::before{background-color:var(--l13-icon-activeBackground)}:host button:disabled{cursor:default;opacity:.3}:host button:focus{outline:solid 1px var(--vscode-focusBorder, transparent)}:host button::before{background-color:var(--l13-icon-background);content:\"\";display:block;height:100%;left:0;-webkit-mask-position:50% 50%;mask-position:50% 50%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;position:absolute;top:0;transition:background-color .1s;width:100%}:host button#copy::before{-webkit-mask-image:url(\"copy-file.svg\");mask-image:url(\"copy-file.svg\")}:host button#goto::before{-webkit-mask-image:url(\"open-file.svg\");mask-image:url(\"open-file.svg\")}:host button#delete::before{-webkit-mask-image:url(\"delete-file.svg\");mask-image:url(\"delete-file.svg\")}:host button#reveal::before{-webkit-mask-image:url(\"reveal-file.svg\");mask-image:url(\"reveal-file.svg\")}",
         "l13-diff-input/l13-diff-input.css": ":host{position:relative;user-select:none}:host>input{background:var(--vscode-input-background);border:none;box-sizing:border-box;color:var(--vscode-input-foreground);display:block;font-size:.8125rem;outline:solid 1px var(--vscode-input-border, transparent);outline-offset:-1px;padding:4px 35px 5px 7px;width:100%;z-index:0}:host>input::selection{color:var(--l13-selection-foreground);background:var(--l13-selection-background)}:host>input:focus{outline-color:var(--vscode-focusBorder, transparent)}:host>input.-error{outline-color:var(--vscode-inputValidation-errorBorder, #cc0000)}:host>button{background:rgba(0,0,0,0);border:0;border-radius:5px;cursor:pointer;height:22px;padding:0 0 0 0;position:absolute;right:4px;top:1px;width:22px}:host>button::before{background:var(--l13-icon-background);content:\"\";height:100%;left:0;-webkit-mask-image:url(\"folder.svg\");mask-image:url(\"folder.svg\");-webkit-mask-position:50% 50%;mask-position:50% 50%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;position:absolute;top:0;width:100%}:host>button:focus{outline:solid 1px var(--vscode-focusBorder, transparent)}:host>button:not([disabled]):hover{background-color:var(--l13-button-hover-background)}:host>button:not([disabled]).-active{background-color:var(--l13-button-active-background)}:host>button[disabled]{cursor:default;opacity:.3}:host>button[disabled]:hover::before{background:var(--l13-icon-background) !important}",
         "l13-diff-intro/l13-diff-intro.css": ":host{background:var(--l13-intro-backgroundUrl) no-repeat;background-size:260px 260px;background-position:50% 0;padding:270px 0 0 0;display:block;min-width:260px;text-align:center;user-select:none}l13-diff-shortcuts{display:inline-table}dl{color:var(--l13-intro-color);cursor:default;display:table-row;opacity:.8}dt{color:var(--l13-intro-color);display:table-cell;letter-spacing:.04em;padding:0 5px 1em 0;text-align:right}dd{display:table-cell;padding:0 0 1em 5px;text-align:left}div.-keybinding{align-items:center;display:flex;line-height:10px}span.-key{background-color:var(--l13-intro-keyBackgroundColor);border:1px solid var(--l13-intro-keyBorderColor);border-bottom-color:var(--l13-intro-shadow);border-radius:3px;box-shadow:inset 0 -1px 0 var(--l13-intro-shadow);color:var(--l13-intro-keyColor);display:inline-block;font-size:11px;line-height:10px;margin:0 2px;padding:3px 5px;vertical-align:middle}",
@@ -1378,12 +1402,13 @@
         "l13-diff-search/l13-diff-search.css": ":host{background:var(--vscode-editorWidget-background);box-shadow:0 2px 8px var(--vscode-widget-shadow);box-sizing:border-box;display:block;height:34px;max-width:calc(100% - 38px);min-width:364px;padding:4px 4px 5px 8px;position:relative;user-select:none;width:364px}#l13_resizer{background:var(--vscode-editorWidget-resizeBorder, var(--l13-searchWidget-borderColor));cursor:col-resize;display:block;height:100%;left:0;position:absolute;top:0;width:3px}div.l13-input{margin:0 154px 0 0;position:relative}div.l13-message{background:var(--vscode-inputValidation-errorBackground);box-sizing:border-box;border:solid 1px var(--vscode-inputValidation-errorBorder);color:var(--vscode-inputValidation-errorForeground);font-size:12px;line-height:17px;margin:-1px 0 0 0;padding:.4em .4em .4em .4em;width:100%}input[type=text]{background:var(--vscode-input-background);border:none;box-sizing:border-box;color:var(--vscode-input-foreground);display:block;font-size:.8125rem;height:25px;outline:solid 1px var(--vscode-input-border, transparent);outline-offset:-1px;margin:0 0 0 0;padding:4px 46px 5px 7px;width:100%;z-index:0}input[type=text]::selection{color:var(--l13-selection-foreground);background:var(--l13-selection-background)}input[type=text]:focus{outline-color:var(--vscode-focusBorder, transparent)}input[type=text].-error{outline-color:var(--vscode-inputValidation-errorBorder)}input[type=checkbox]{-webkit-appearance:none;appearance:none;border-radius:3px;box-sizing:border-box;cursor:pointer;display:inline-block;height:20px;margin:0 0 0 0;opacity:.7;outline:solid 1px rgba(0,0,0,0);outline-offset:-1px;padding:0 0 0 0;position:absolute;top:3px;width:20px}input[type=checkbox]:hover{opacity:1}input[type=checkbox]:focus{outline-color:var(--vscode-focusBorder, transparent);opacity:1}input[type=checkbox]::after{background:var(--l13-icon-background);content:\"\";height:100%;left:0;-webkit-mask-position:50% 50%;mask-position:50% 50%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;opacity:.7;position:absolute;top:0;width:100%}input[type=checkbox]#l13_case_sensitive{right:27px}input[type=checkbox]#l13_case_sensitive:hover{outline:var(--l13-list-hover-outline, none)}input[type=checkbox]#l13_case_sensitive::after{-webkit-mask-image:url(\"case-sensitive.svg\");mask-image:url(\"case-sensitive.svg\")}input[type=checkbox]#l13_use_regexp{right:5px}input[type=checkbox]#l13_use_regexp:hover{outline:var(--l13-list-hover-outline, none)}input[type=checkbox]#l13_use_regexp::after{-webkit-mask-image:url(\"regexp.svg\");mask-image:url(\"regexp.svg\")}input[type=checkbox].-option{height:22px;top:6px;width:22px}input[type=checkbox]#l13_use_files{right:132px}input[type=checkbox]#l13_use_files::after{-webkit-mask-image:url(\"list-file.svg\");mask-image:url(\"list-file.svg\");left:1px}input[type=checkbox]#l13_use_folders{right:106px}input[type=checkbox]#l13_use_folders::after{-webkit-mask-image:url(\"list-folder.svg\");mask-image:url(\"list-folder.svg\")}input[type=checkbox]#l13_use_symlinks{right:80px}input[type=checkbox]#l13_use_symlinks::after{-webkit-mask-image:url(\"list-symlink.svg\");mask-image:url(\"list-symlink.svg\")}input[type=checkbox]#l13_use_conflicts{right:54px}input[type=checkbox]#l13_use_conflicts::after{-webkit-mask-image:url(\"search-conflict.svg\");mask-image:url(\"search-conflict.svg\")}input[type=checkbox]#l13_use_others{right:28px}input[type=checkbox]#l13_use_others::after{-webkit-mask-image:url(\"search-other.svg\");mask-image:url(\"search-other.svg\")}input[type=checkbox]:checked{background:var(--vscode-inputOption-activeBackground, transparent);outline-color:var(--vscode-inputOption-activeBorder)}input[type=checkbox]:checked::after{opacity:1}button{background:rgba(0,0,0,0);border:0;height:20px;margin:0 0 0 0;padding:0 0 0 0;position:absolute;right:4px;top:7px;width:20px}button::before{background:var(--l13-icon-background);content:\"\";height:100%;left:0;-webkit-mask-position:50% 50%;mask-position:50% 50%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;position:absolute;top:0;width:100%}button:focus{outline:solid 1px var(--vscode-focusBorder, transparent)}button:hover{background:var(--l13-searchButton-backgroundColor-hover);cursor:pointer}button[disabled]{opacity:.3;cursor:default}button[disabled]:hover::before{background:var(--l13-icon-background) !important}button#l13_close:hover{outline:var(--l13-list-hover-outline, none)}button#l13_close::before{-webkit-mask-image:url(\"close.svg\");mask-image:url(\"close.svg\")}",
         "l13-diff-swap/l13-diff-swap.css": ":host{display:block;user-select:none}:host>button{background:rgba(0,0,0,0);border:0;border-radius:5px;cursor:pointer;height:22px;margin:2px 0 0 0;padding:0 0 0 0;position:relative;width:22px}:host>button::before{background:var(--l13-icon-background);content:\"\";height:100%;left:0;-webkit-mask-image:url(\"swap.svg\");mask-image:url(\"swap.svg\");-webkit-mask-position:50% 50%;mask-position:50% 50%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;position:absolute;top:0;width:100%}:host>button:focus{outline:solid 1px var(--vscode-focusBorder, transparent)}:host>button:not([disabled]):hover{background-color:var(--l13-button-hover-background);outline:var(--l13-list-hover-outline, none)}:host>button:not([disabled]).-active{background-color:var(--l13-button-active-background)}:host>button[disabled]{cursor:default;opacity:.3}:host>button[disabled]:hover::before{background:var(--l13-icon-background) !important}",
         "l13-diff-views/l13-diff-views.css": ":host{cursor:default;display:block;padding-left:10px;user-select:none}:host>input[type=checkbox]{-webkit-appearance:none;appearance:none;background:rgba(0,0,0,0);border-radius:5px;cursor:pointer;height:26px;margin:0 4px 0 0;padding:0 0 0 0;position:relative;width:26px}:host>input[type=checkbox]::before{background:var(--l13-icon-background);content:\"\";height:100%;left:0;-webkit-mask-position:50% 50%;mask-position:50% 50%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;position:absolute;top:0;width:100%}:host>input[type=checkbox]:focus{outline:solid 1px var(--vscode-focusBorder, transparent)}:host>input[type=checkbox]:not([disabled]):hover{cursor:pointer;outline:var(--l13-list-hover-outline, none);background-color:var(--l13-button-hover-background)}:host>input[type=checkbox]:not([disabled]).-active{background-color:var(--l13-button-active-background)}:host>input[type=checkbox][disabled]{opacity:.3;cursor:default}:host>input[type=checkbox]:checked::after{background:var(--vscode-inputOption-activeBorder);content:\"\";height:2px;left:4px;position:absolute;bottom:0;width:18px}:host>input[type=checkbox]#l13_show_unchanged::before{-webkit-mask-image:url(\"show-unchanged.svg\");mask-image:url(\"show-unchanged.svg\")}:host>input[type=checkbox]#l13_show_deleted::before{-webkit-mask-image:url(\"show-deleted.svg\");mask-image:url(\"show-deleted.svg\")}:host>input[type=checkbox]#l13_show_modified::before{-webkit-mask-image:url(\"show-modified.svg\");mask-image:url(\"show-modified.svg\")}:host>input[type=checkbox]#l13_show_untracked::before{-webkit-mask-image:url(\"show-untracked.svg\");mask-image:url(\"show-untracked.svg\")}:host>input[type=checkbox]#l13_show_ignored::before{-webkit-mask-image:url(\"show-ignored.svg\");mask-image:url(\"show-ignored.svg\")}",
-        "l13-diff/l13-diff.css": ":host{display:flex;font-size:.8125rem;flex-direction:column;height:100%;max-height:100%;min-width:610px;position:relative}l13-diff-panel{background:var(--vscode-sideBar-background);position:relative;z-index:2}l13-diff-folders{background:var(--vscode-sideBar-background);display:flex;position:relative;z-index:4}l13-diff-input{box-sizing:border-box;margin:10px 10px 0 15px;position:relative;width:50%;z-index:3}l13-diff-input:first-child{margin:10px 15px 0 10px}l13-diff-menu{max-height:50vh;overflow:auto;position:absolute;width:100%;z-index:5}l13-diff-swap{left:calc(50% - 11px);position:absolute;top:9px;z-index:3}l13-diff-tools{background:var(--vscode-sideBar-background);display:flex;padding:7px 0 4px 0;position:relative;z-index:3}l13-diff-views,l13-diff-compare{min-width:175px;width:25%}l13-diff-actions{min-width:240px;width:50%}l13-diff-widgets{display:block;position:relative;z-index:2}l13-diff-search{position:absolute;right:28px;top:0}l13-diff-search.-movein{animation:movein .1s linear}l13-diff-search.-moveout{animation:moveout .1s linear}@keyframes movein{0%{top:-42px}100%{top:0}}@keyframes moveout{0%{top:0}100%{top:-42px}}l13-diff-list{position:relative;margin:0 30px 0 0;z-index:1}l13-diff-list:focus{outline:solid 1px var(--vscode-focusBorder, transparent);outline-offset:-1px}l13-diff-list.-widgets{margin-top:34px}l13-diff-list.-active{pointer-events:none}l13-diff-list.-active::-webkit-scrollbar-thumb{background-color:var(--vscode-scrollbarSlider-activeBackground)}l13-diff-navigator{position:absolute;right:0;top:75px;width:44px;z-index:0}l13-diff-navigator.-widgets{margin-top:34px}l13-diff-intro{left:50%;position:absolute;top:50%;transform:translate(-50%, calc(-50% + 20px));user-select:none}l13-diff-no-result{display:block;left:50%;opacity:.7;position:absolute;top:50%;text-align:center;transform:translate(-50%, calc(-50% + 20px));user-select:none}::-webkit-scrollbar{height:14px;width:14px}::-webkit-scrollbar-thumb{background-color:var(--vscode-scrollbarSlider-background)}::-webkit-scrollbar-thumb:hover{background-color:var(--vscode-scrollbarSlider-hoverBackground)}::-webkit-scrollbar-thumb:active{background-color:var(--vscode-scrollbarSlider-activeBackground)}::-webkit-scrollbar-corner{background-color:rgba(0,0,0,0)}"
+        "l13-diff/l13-diff.css": ":host{display:flex;font-size:.8125rem;flex-direction:column;height:100%;max-height:100%;min-width:610px;position:relative}l13-diff-panel{background:var(--vscode-sideBar-background);position:relative;z-index:2}l13-diff-folders{background:var(--vscode-sideBar-background);display:flex;position:relative;z-index:4}l13-diff-input{box-sizing:border-box;margin:10px 10px 0 15px;position:relative;width:50%;z-index:3}l13-diff-input:first-child{margin:10px 15px 0 10px}l13-diff-menu{max-height:50vh;overflow:auto;position:absolute;width:100%;z-index:5}l13-diff-swap{left:calc(50% - 11px);position:absolute;top:9px;z-index:3}l13-diff-tools{background:var(--vscode-sideBar-background);display:flex;padding:7px 0 4px 0;position:relative;z-index:3}l13-diff-views,l13-diff-compare,l13-diff-complete{min-width:175px}l13-diff-actions{min-width:240px;width:50%}l13-diff-widgets{display:block;position:relative;z-index:2}l13-diff-search{position:absolute;right:28px;top:0}l13-diff-search.-movein{animation:movein .1s linear}l13-diff-search.-moveout{animation:moveout .1s linear}@keyframes movein{0%{top:-42px}100%{top:0}}@keyframes moveout{0%{top:0}100%{top:-42px}}l13-diff-list{position:relative;margin:0 30px 0 0;z-index:1}l13-diff-list:focus{outline:solid 1px var(--vscode-focusBorder, transparent);outline-offset:-1px}l13-diff-list.-widgets{margin-top:34px}l13-diff-list.-active{pointer-events:none}l13-diff-list.-active::-webkit-scrollbar-thumb{background-color:var(--vscode-scrollbarSlider-activeBackground)}l13-diff-navigator{position:absolute;right:0;top:75px;width:44px;z-index:0}l13-diff-navigator.-widgets{margin-top:34px}l13-diff-intro{left:50%;position:absolute;top:50%;transform:translate(-50%, calc(-50% + 20px));-webkit-user-select:none;user-select:none}l13-diff-no-result{display:block;left:50%;opacity:.7;position:absolute;top:50%;text-align:center;transform:translate(-50%, calc(-50% + 20px));-webkit-user-select:none;user-select:none}::-webkit-scrollbar{height:14px;width:14px}::-webkit-scrollbar-thumb{background-color:var(--vscode-scrollbarSlider-background)}::-webkit-scrollbar-thumb:hover{background-color:var(--vscode-scrollbarSlider-hoverBackground)}::-webkit-scrollbar-thumb:active{background-color:var(--vscode-scrollbarSlider-activeBackground)}::-webkit-scrollbar-corner{background-color:rgba(0,0,0,0)}"
     };
 
     var templates = {
         "l13-diff-actions/l13-diff-actions.html": "<button id=\"l13_copy_right\" [disabled]=\"copyDisabled\"></button>\r\n<button id=\"l13_select_deleted\" [disabled]=\"selectDisabled\"></button>\r\n<button id=\"l13_select_modified\" [disabled]=\"selectDisabled\"></button>\r\n<button id=\"l13_select_untracked\" [disabled]=\"selectDisabled\"></button>\r\n<button id=\"l13_select_all\" [disabled]=\"selectDisabled\"></button>\r\n<button id=\"l13_copy_left\" [disabled]=\"copyDisabled\"></button>",
-        "l13-diff-compare/l13-diff-compare.html": "<button [disabled]=\"disabled\">Compare</button>\r\n<button [disabled]=\"disabled\">Accept Merge</button>\r\n<button [disabled]=\"disabled\">Cancel Merge</button>",
+        "l13-diff-compare/l13-diff-compare.html": "<button [disabled]=\"disabled\">Compare</button>",
+        "l13-diff-complete/l13-diff-complete.html": "<button [disabled]=\"disabled\">Accept Merge</button>\r\n<button [disabled]=\"disabled\">Cancel Merge</button>",
         "l13-diff-context/l13-diff-context.html": "<button id=\"copy\" [disabled]=\"copyDisabled\"></button><button id=\"goto\" [disabled]=\"gotoDisabled\"></button><button id=\"reveal\" [disabled]=\"revealDisabled\"></button><button id=\"delete\" [disabled]=\"deleteDisabled\"></button>",
         "l13-diff-input/l13-diff-input.html": "<input type=\"text\" [(model)]=\"value\" [disabled]=\"disabled\">\r\n<button [disabled]=\"disabled\"></button>\r\n<slot></slot>",
         "l13-diff-intro/l13-diff-intro.html": "<l13-diff-shortcuts></l13-diff-shortcuts>",
@@ -1394,10 +1419,10 @@
         "l13-diff-search/l13-diff-search.html": "<div id=\"l13_resizer\"></div>\r\n<div class=\"l13-input\">\r\n\t<input id=\"l13_searchterm\" type=\"text\" [(model)]=\"searchterm\" [disabled]=\"disabled\">\r\n\t<input id=\"l13_case_sensitive\" type=\"checkbox\" [(model)]=\"useCaseSensitive\" [disabled]=\"disabled\">\r\n\t<input id=\"l13_use_regexp\" type=\"checkbox\" [(model)]=\"useRegExp\" [disabled]=\"disabled\">\r\n\t<div class=\"l13-message\" [if]=\"error\">{{ error }}</div>\r\n</div>\r\n<input id=\"l13_use_files\" class=\"-option\" type=\"checkbox\" [(model)]=\"useFiles\" [disabled]=\"disabled\">\r\n<input id=\"l13_use_folders\" class=\"-option\" type=\"checkbox\" [(model)]=\"useFolders\" [disabled]=\"disabled\">\r\n<input id=\"l13_use_symlinks\" class=\"-option\" type=\"checkbox\" [(model)]=\"useSymlinks\" [disabled]=\"disabled\">\r\n<input id=\"l13_use_conflicts\" class=\"-option\" type=\"checkbox\" [(model)]=\"useConflicts\" [disabled]=\"disabled\">\r\n<input id=\"l13_use_others\" class=\"-option\" type=\"checkbox\" [(model)]=\"useOthers\" [disabled]=\"disabled\">\r\n<button id=\"l13_close\" [disabled]=\"disabled\"></button>",
         "l13-diff-swap/l13-diff-swap.html": "<button [disabled]=\"disabled\"></button>",
         "l13-diff-views/l13-diff-views.html": "<input id=\"l13_show_unchanged\" type=\"checkbox\" [(model)]=\"unchangedChecked\" [disabled]=\"disabled\">\r\n<input id=\"l13_show_deleted\" type=\"checkbox\" [(model)]=\"deletedChecked\" [disabled]=\"disabled\">\r\n<input id=\"l13_show_modified\" type=\"checkbox\" [(model)]=\"modifiedChecked\" [disabled]=\"disabled\">\r\n<input id=\"l13_show_untracked\" type=\"checkbox\" [(model)]=\"untrackedChecked\" [disabled]=\"disabled\">\r\n<input id=\"l13_show_ignored\" type=\"checkbox\" [(model)]=\"ignoredChecked\" [disabled]=\"disabled\">",
-        "l13-diff/l13-diff.html": "<l13-diff-panel vmId=\"panel\">\r\n\t<l13-diff-folders>\r\n\t\t<l13-diff-input vmId=\"left\" id=\"left\" placeholder=\"Left file or folder\"></l13-diff-input>\r\n\t\t<l13-diff-swap vmId=\"swap\"></l13-diff-swap>\r\n\t\t<l13-diff-input vmId=\"right\" id=\"right\" placeholder=\"Right file or folder\"></l13-diff-input>\r\n\t</l13-diff-folders>\r\n\t<l13-diff-tools>\r\n\t\t<!-- <l13-diff-views vmId=\"views\"></l13-diff-views> -->\r\n\t\t<l13-diff-actions vmId=\"actions\"></l13-diff-actions>\r\n\t\t<l13-diff-compare vmId=\"compare\"></l13-diff-compare>\r\n\t</l13-diff-tools>\r\n\t<l13-diff-widgets></l13-diff-widgets>\r\n</l13-diff-panel>\r\n<l13-diff-list vmId=\"list\"></l13-diff-list>\r\n<l13-diff-navigator vmId=\"navigator\"></l13-diff-navigator>\r\n<l13-diff-intro></l13-diff-intro>\r\n<l13-diff-no-result>No items are matching the current filter settings.</l13-diff-no-result>"
+        "l13-diff/l13-diff.html": "<l13-diff-panel vmId=\"panel\">\r\n\t<l13-diff-folders>\r\n\t\t<l13-diff-input vmId=\"left\" id=\"left\" placeholder=\"Left file or folder\"></l13-diff-input>\r\n\t\t<l13-diff-swap vmId=\"swap\"></l13-diff-swap>\r\n\t\t<l13-diff-input vmId=\"right\" id=\"right\" placeholder=\"Right file or folder\"></l13-diff-input>\r\n\t</l13-diff-folders>\r\n\t<l13-diff-tools>\r\n\t\t<!-- <l13-diff-views vmId=\"views\"></l13-diff-views> -->\r\n\t\t<l13-diff-actions vmId=\"actions\"></l13-diff-actions>\r\n\t\t<l13-diff-compare vmId=\"compare\"></l13-diff-compare>\r\n\t\t<l13-diff-complete vmId=\"complete\"></l13-diff-complete>\r\n\t</l13-diff-tools>\r\n\t<l13-diff-widgets></l13-diff-widgets>\r\n</l13-diff-panel>\r\n<l13-diff-list vmId=\"list\"></l13-diff-list>\r\n<l13-diff-navigator vmId=\"navigator\"></l13-diff-navigator>\r\n<l13-diff-intro></l13-diff-intro>\r\n<l13-diff-no-result>No items are matching the current filter settings.</l13-diff-no-result>"
     };
 
-    function init$j({ list }) {
+    function init$l({ list }) {
         msg.on('l13Diff.action.actions.copyToLeftFolder', () => list.copy('right'));
         msg.on('l13Diff.action.actions.copyToRightFolder', () => list.copy('left'));
         msg.on('l13Diff.action.actions.selectAllEntries', () => {
@@ -1409,7 +1434,7 @@
         msg.on('l13Diff.action.actions.selectModifiedEntries', () => list.selectByStatus('modified'));
     }
 
-    function init$i({ diff, left, right, search }) {
+    function init$k({ diff, left, right, search }) {
         msg.on('l13Diff.action.panel.compare', () => {
             if (!left.focused && !right.focused && !search.focused)
                 diff.initCompare();
@@ -1420,7 +1445,16 @@
         });
     }
 
-    function init$h({ leftVM, rightVM }) {
+    function init$j({ left, right, search }) {
+        msg.on('l13Diff.action.panel.complete', () => {
+            if (!left.focused && !right.focused && !search.focused) {
+                return;
+            }
+        });
+        msg.on('l13Diff.action.panel.rejectComplete', () => null);
+    }
+
+    function init$i({ leftVM, rightVM }) {
         msg.on('l13Diff.action.panel.addToFavorites', () => {
             msg.send('save:favorite', {
                 pathA: leftVM.value,
@@ -1429,14 +1463,14 @@
         });
     }
 
-    function init$g({ leftVM, rightVM }) {
+    function init$h({ leftVM, rightVM }) {
         msg.on('l13Diff.action.input.pickLeftFolder', () => leftVM.pick());
         msg.on('l13Diff.action.input.pickLeftFile', () => leftVM.pick(true));
         msg.on('l13Diff.action.input.pickRightFolder', () => rightVM.pick());
         msg.on('l13Diff.action.input.pickRightFile', () => rightVM.pick(true));
     }
 
-    function init$f({ diff, list, search }) {
+    function init$g({ diff, list, search }) {
         msg.on('l13Diff.action.list.delete', () => {
             if (list.disabled)
                 return;
@@ -1449,14 +1483,14 @@
         });
     }
 
-    function init$e({ menu }) {
+    function init$f({ menu }) {
         msg.on('l13Diff.action.menu.close', () => {
             if (menu && menu.parentNode)
                 menu.remove();
         });
     }
 
-    function init$d({ search, searchVM, widgets }) {
+    function init$e({ search, searchVM, widgets }) {
         msg.on('l13Diff.action.search.open', () => {
             if (!search.parentNode) {
                 search.classList.add('-movein');
@@ -1496,12 +1530,12 @@
         });
     }
 
-    function init$c({ diff }) {
+    function init$d({ diff }) {
         msg.on('l13Diff.action.inputs.swap', () => diff.swapInputs());
         msg.on('l13Diff.action.inputs.swapAll', () => diff.swapInputs(true));
     }
 
-    function init$b({ viewsVM }) {
+    function init$c({ viewsVM }) {
         msg.on('l13Diff.action.views.toggleShowAllCreated', () => {
             viewsVM.untrackedChecked = !viewsVM.untrackedChecked;
             viewsVM.requestUpdate();
@@ -1524,7 +1558,7 @@
         });
     }
 
-    function init$a({ diff, actions, list }) {
+    function init$b({ diff, actions, list }) {
         actions.addEventListener('select', (event) => {
             const { metaKey, ctrlKey, status } = event.detail;
             if (status)
@@ -1542,7 +1576,7 @@
         });
     }
 
-    function init$9({ diff, compare }) {
+    function init$a({ diff, compare }) {
         compare.addEventListener('compare', (event) => {
             if (event.detail.altKey)
                 msg.send('compare:multi');
@@ -1550,6 +1584,11 @@
                 diff.initCompare();
         });
         msg.on('compare:multi', () => diff.initCompare());
+    }
+
+    function init$9({ diff, complete }) {
+        complete.addEventListener('complete', (event) => {
+        });
     }
 
     function init$8({ diff, leftVM, rightVM }) {
@@ -1697,6 +1736,7 @@
 
     const actionsVM = new L13DiffActionsViewModelService().model('actions');
     const compareVM = new L13DiffCompareViewModelService().model('compare');
+    const completeVM = new L13DiffCompleteViewModelService().model('complete');
     const leftVM = new L13DiffInputViewModelService().model('left');
     const listVM = new L13DiffListViewModelService().model('list');
     const panelVM = new L13DiffPanelViewModelService().model('panel');
@@ -1720,6 +1760,7 @@
             const diff = this;
             const actions = this.actions;
             const compare = this.compare;
+            const complete = this.complete;
             const intro = this.intro;
             const left = this.left;
             const list = this.list;
@@ -1730,17 +1771,19 @@
             const search = this.search;
             const swap = this.swap;
             const widgets = this.widgets;
-            init$j({ list });
-            init$i({ diff, left, right, search });
+            init$l({ list });
+            init$k({ diff, left, right, search });
+            init$j({ diff, left, right, search });
+            init$i({ leftVM, rightVM });
             init$h({ leftVM, rightVM });
-            init$g({ leftVM, rightVM });
-            init$f({ diff, list, search });
-            init$e({ menu });
-            init$d({ search, searchVM, widgets });
-            init$c({ diff });
-            init$b({ viewsVM });
-            init$a({ diff, actions, list });
-            init$9({ diff, compare });
+            init$g({ diff, list, search });
+            init$f({ menu });
+            init$e({ search, searchVM, widgets });
+            init$d({ diff });
+            init$c({ viewsVM });
+            init$b({ diff, actions, list });
+            init$a({ diff, compare });
+            init$9({ diff, complete });
             init$7({ diff, left, menu, right });
             init$6({ diff, actionsVM, intro, list, listVM, navigator, result });
             init$5({ list, navigator });
@@ -1757,6 +1800,7 @@
                     actionsVM.disableCopy();
             }
             compareVM.enable();
+            completeVM.enable();
             leftVM.enable();
             listVM.enable();
             rightVM.enable();
@@ -1768,6 +1812,7 @@
             panelVM.loading = true;
             actionsVM.disable();
             compareVM.disable();
+            completeVM.disable();
             leftVM.disable();
             listVM.disable();
             rightVM.disable();
@@ -1854,6 +1899,10 @@
         __metadata("design:type", Function)
     ], L13DiffComponent.prototype, "compare", void 0);
     __decorate([
+        L13Query('l13-diff-complete'),
+        __metadata("design:type", Function)
+    ], L13DiffComponent.prototype, "complete", void 0);
+    __decorate([
         L13Query('l13-diff-navigator'),
         __metadata("design:type", Function)
     ], L13DiffComponent.prototype, "navigator", void 0);
@@ -1891,6 +1940,7 @@
 
     let L13DiffActionsComponent = class L13DiffActionsComponent extends L13Element {
         constructor() {
+            var _a, _b, _c, _d, _e, _f;
             super();
             setLabel(this.copyRight, 'Copy Selection to the Left Folder');
             setLabel(this.selectDeleted, 'Select All Deleted Files');
@@ -1905,22 +1955,22 @@
             addButtonActiveStyleEvents(this.selectAll);
             addButtonActiveStyleEvents(this.copyLeft);
             disableContextMenu(this);
-            this.copyRight.addEventListener('click', ({ altKey }) => {
+            (_a = this.copyRight) === null || _a === void 0 ? void 0 : _a.addEventListener('click', ({ altKey }) => {
                 this.dispatchCustomEvent('copy', { from: 'right', altKey });
             });
-            this.selectDeleted.addEventListener('click', ({ metaKey, ctrlKey }) => {
+            (_b = this.selectDeleted) === null || _b === void 0 ? void 0 : _b.addEventListener('click', ({ metaKey, ctrlKey }) => {
                 this.dispatchCustomEvent('select', { status: 'deleted', metaKey, ctrlKey });
             });
-            this.selectModified.addEventListener('click', ({ metaKey, ctrlKey }) => {
+            (_c = this.selectModified) === null || _c === void 0 ? void 0 : _c.addEventListener('click', ({ metaKey, ctrlKey }) => {
                 this.dispatchCustomEvent('select', { status: 'modified', metaKey, ctrlKey });
             });
-            this.selectUntracked.addEventListener('click', ({ metaKey, ctrlKey }) => {
+            (_d = this.selectUntracked) === null || _d === void 0 ? void 0 : _d.addEventListener('click', ({ metaKey, ctrlKey }) => {
                 this.dispatchCustomEvent('select', { status: 'untracked', metaKey, ctrlKey });
             });
-            this.selectAll.addEventListener('click', ({ metaKey, ctrlKey }) => {
+            (_e = this.selectAll) === null || _e === void 0 ? void 0 : _e.addEventListener('click', ({ metaKey, ctrlKey }) => {
                 this.dispatchCustomEvent('select', { metaKey, ctrlKey });
             });
-            this.copyLeft.addEventListener('click', ({ altKey }) => {
+            (_f = this.copyLeft) === null || _f === void 0 ? void 0 : _f.addEventListener('click', ({ altKey }) => {
                 this.dispatchCustomEvent('copy', { from: 'left', altKey });
             });
         }
@@ -3630,9 +3680,10 @@ Modified: ${formatDate(new Date(stat.mtime))}`;
 
     let L13DiffSwapComponent = class L13DiffSwapComponent extends L13Element {
         constructor() {
+            var _a;
             super();
             setLabel(this.button, 'Swap Paths');
-            this.button.addEventListener('click', (event) => this.dispatchCustomEvent('swap', event));
+            (_a = this.button) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (event) => this.dispatchCustomEvent('swap', event));
             addButtonActiveStyleEvents(this.button);
             disableContextMenu(this);
         }
