@@ -55,9 +55,9 @@ export class SfConflictProvider implements vscode.TreeDataProvider<ConflictItem>
                 vscode.window.showErrorMessage(`${err.code} ${err.message} ${err.stack}`);
               }
               this.retrieveState = JSON.parse(stdout);
-              this.retrieve = this.retrieveState?.result.toRetrieve.map(a => new ConflictFile(a.fullName, a.type, a.path));
+              this.retrieve = this.retrieveState?.result?.toRetrieve.map(a => new ConflictFile(a.fullName, a.type, a.path));
               const oldConflicts = this.conflicts;
-              this.conflicts = this.retrieveState?.result.conflicts.map(a => new ConflictFile(a.fullName, a.type, a.path, true));
+              this.conflicts = this.retrieveState?.result?.conflicts.map(a => new ConflictFile(a.fullName, a.type, a.path, true));
 
               this.retFileTypes = [];
 

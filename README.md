@@ -42,6 +42,13 @@ Search SFSCM for extension settings.
 
 ## Release Notes
 
+### 0.0.8
+* Fix for when preview check returns empty results
+
+### 0.0.7
+* Clean up readmes
+
+
 ### 0.0.6 
 
 * Initial push to store for test
